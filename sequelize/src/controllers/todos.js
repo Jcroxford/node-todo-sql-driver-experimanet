@@ -59,6 +59,21 @@ module.exports = {
       })
       .then(todo => res.send(todo))
       .catch(error => res.status(400).send(error))
+  },
+
+  destroy(req, res) {
+    return Todo
+      .findById(req.params.todoId)
+      .then(todo => {
+        console.log(todo);
+        if(!todo) {
+          return res.status(400).send({ message: 'todo not found' })
+        }
+
+        return todo.destroy()
+      })
+      .then(() => res.status(204).send())
+      .catch(error => res.status(400).send(error))
   }
 
 }
