@@ -6,6 +6,7 @@ module.exports = (app) => {
   // todos routes
   app.post('/api/todos/create', todosController.create)
   app.get('/api/todos/list', todosController.list)
+  app.get('/api/todos/:todoId', todosController.retrieve)
 
   // todo items routes
   app.post('/api/todos/create/:todoId/items', todoItemsController.create)
