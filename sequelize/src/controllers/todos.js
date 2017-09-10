@@ -40,6 +40,25 @@ module.exports = {
         res.send(todo)
       })
       .catch(error => res.status(400).send(error))
+  },
+
+  update(req, res) {
+    return Todo
+      .findById(req.params.todoId, {
+        include: [{
+          model: TodoItem,
+          as: 'todoItems'
+        }]
+      })
+      .then(todo => {
+        if(!todo) {
+          return res.status(400).send({ message: 'todo not found' })
+        }
+
+        return todo.update({ title: req.body.title || title })
+      })
+      .then(todo => res.send(todo))
+      .catch(error => res.status(400).send(error))
   }
 
 }
