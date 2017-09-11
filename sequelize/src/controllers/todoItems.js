@@ -10,6 +10,32 @@ module.exports = {
       })
       .then(todoItem => res.status(201).send(todoItem))
       .catch(error => res.status(400).send(error))
+  },
+
+  update(req, res) {
+    return TodoItem
+      .find({
+        where: {
+          id: req.params.todoItemId,
+          todoId: req.params.todoId
+        }
+      })
+      .then(todoItem => {
+        if(!todoItem) {
+          return res.status(400).send({ message: 'todo item does not exist' })
+        }
+
+        return todoItem.update({
+          content: req.body.content || todoItem.content,
+          completed: req.body.completed || todoItem.completed
+        })
+      })
+      .then(todoItem => res.send(todoItem))
+      .catch(error => res.status(400).send(error))
+  },
+
+  delete(req, res) {
+
   }
 
 }
