@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTableIfNotExists('Todos', (todosTable) => {
     todosTable.increments()
     todosTable.string('title').notNullable()
-    todosTable.timestamp('createAt').defaultTo(knex.fn.now())
+    todosTable.timestamp('createdAt').defaultTo(knex.fn.now())
     todosTable.timestamp('updatedAt').defaultTo(knex.fn.now())
   })
 };

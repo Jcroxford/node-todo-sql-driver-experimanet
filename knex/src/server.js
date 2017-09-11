@@ -7,6 +7,9 @@ const app = express()
 app.use(logger('dev'))
 app.use(bodyParser.json())
 
+// rest api routes
+require('./routes')(app)
+
 app.get('*', (req, res) => {
   res.send({ message: 'welcome to the knex server' })
 })
