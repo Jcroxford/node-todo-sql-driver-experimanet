@@ -35,7 +35,22 @@ module.exports = {
   },
 
   delete(req, res) {
-
+    return TodoItem
+      .find({
+        where: {
+          id: req.params.todoItemId,
+          todoId: req.params.todoId
+        }
+      })
+      .then(todoItem => {
+        if(!todoItem) {
+          // return res.status(400).send({ message: 'todo item does not exist' })
+          throw new Error('todo item does not exist')
+        }
+        return todoItem.destroy()
+      })
+      .then(() => res.status(204).send())
+      .catch(error => res.status(400).send({ message: error.message }))
   }
 
 }
