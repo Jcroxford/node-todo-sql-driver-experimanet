@@ -22,7 +22,7 @@ module.exports = {
       })
       .then(todoItem => {
         if(!todoItem) {
-          return res.status(400).send({ message: 'todo item does not exist' })
+          throw new Error('todo item does not exist')
         }
 
         return todoItem.update({
@@ -31,7 +31,7 @@ module.exports = {
         })
       })
       .then(todoItem => res.send(todoItem))
-      .catch(error => res.status(400).send(error))
+      .catch(error => res.status(400).send({ message: error.message }))
   },
 
   delete(req, res) {

@@ -34,12 +34,12 @@ module.exports = {
       })
       .then(todo => {
         if(!todo) {
-          return res.status(400).send({ message: 'todo not found' })
+          throw new Error('todo not found')
         }
 
         res.send(todo)
       })
-      .catch(error => res.status(400).send(error))
+      .catch(error => res.status(400).send({ message: error.message }))
   },
 
   update(req, res) {
@@ -67,13 +67,13 @@ module.exports = {
       .then(todo => {
         console.log(todo);
         if(!todo) {
-          return res.status(400).send({ message: 'todo not found' })
+          throw new Error('todo not found')
         }
 
         return todo.destroy()
       })
       .then(() => res.status(204).send())
-      .catch(error => res.status(400).send(error))
+      .catch(error => res.status(400).send({ message: error.message }))
   }
 
 }
