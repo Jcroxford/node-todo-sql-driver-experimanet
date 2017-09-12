@@ -88,7 +88,13 @@ module.exports = {
         .from('Todos')
         .leftJoin('TodoItems', 'Todos.id', 'TodoItems.todoId')
         .where('Todos.id', todoId)
-        .then(todos => groupTodosByTodoId(todos))
+        .then(todos => {
+          if(todos.length === 0) {
+            throw new Error('todo does not exist')
+          }
+
+          return groupTodosByTodoId(todos)
+        })
         .then(todos => resolve(formatTodos(todos)[0])) // removing from array because there should only ever be 1 object
         .catch(error => reject(error))
     })

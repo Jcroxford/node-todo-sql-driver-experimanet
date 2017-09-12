@@ -20,7 +20,7 @@ module.exports = {
     return queries
       .getTodoById(req.params.todoId)
       .then(todo => res.send(todo))
-      .catch(error => res.status(400).send(error))
+      .catch(error => res.status(400).send({ message: error.message }))
   },
 
   update(req, res) {
