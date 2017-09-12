@@ -6,8 +6,8 @@ exports.up = function(knex, Promise) {
     todoItemsTable.boolean('complete').defaultTo(false)
     todoItemsTable.timestamp('createdAt').defaultTo(knex.fn.now())
     todoItemsTable.timestamp('updatedAt').defaultTo(knex.fn.now())
-    todoItemsTable.integer('TodosId').unsigned().notNullable()
-    todoItemsTable.foreign('TodosId').references('id').inTable('Todos')
+    todoItemsTable.integer('todoId').unsigned().notNullable()
+    todoItemsTable.foreign('todoId').references('id').inTable('Todos')
   })
 };
 
