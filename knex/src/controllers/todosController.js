@@ -14,6 +14,13 @@ module.exports = {
       .getAllTodos()
       .then(todos => res.send(todos))
       .catch(error => res.status(400).send(error))
+  },
+
+  retrieve(req, res) {
+    return queries
+      .getTodoById(req.params.todoId)
+      .then(todo => res.send(todo))
+      .catch(error => res.status(400).send(error))
   }
 
 }
