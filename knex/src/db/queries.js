@@ -94,6 +94,29 @@ module.exports = {
     })
   },
 
+  updateTodoById(todoId, title) {
+    const queries = this
+    
+    if(!title) {
+      return Promise.resolve(queries.getTodoById(todoId))
+    }
+    
+    return new Promise((resolve, reject) => {
+
+      knex
+        .from('Todos')
+        .update({ title, updatedAt: knex.fn.now() })
+        .where('id', todoId)
+        .then(updated => {
+          if(!updated) { 
+            throw new Error('todo does not exist')
+          }
+        })
+        .then(() => resolve(queries.getTodoById(todoId)))
+        .catch(error => reject(error))
+    })
+  },
+
   // ===========================
   // todoItem methods
   // ===========================
