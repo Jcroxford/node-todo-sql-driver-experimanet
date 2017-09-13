@@ -12,7 +12,7 @@ module.exports = (app) => {
 
   // todo items routes
   app.post('/api/todos/create/:todoId/items', todoItemsController.create)
-  // app.put('/api/todos/update/:todoId/:todoItemId', todoItemsController.update)
+  app.put('/api/todos/update/:todoId/:todoItemId', todoItemsController.update)
   // app.delete('/api/todos/remove/:todoId/:todoItemId', todoItemsController.delete)
 
 }

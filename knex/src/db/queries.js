@@ -162,10 +162,10 @@ module.exports = {
   // todoItem methods
   // ===========================
   createTodoItem(content, todoId) {
-    const querries = this
+    const queries = this
 
     return new Promise((resolve, reject) => {
-      querries.getTodoById(todoId)
+      queries.getTodoById(todoId)
         .then(todos => {
           if(todos.length === 0) {
             throw new Error('todo does not exist')
@@ -173,6 +173,44 @@ module.exports = {
 
           resolve(knex.returning('*').insert({ content, todoId }).into('TodoItems'))
         })
+        .catch(error => reject(error))
+    })
+  },
+
+  getTodoItemById(todoItemId, todoId) {
+    return knex
+      .select()
+      .from('TodoItems')
+      .where({
+        id: todoItemId,
+        todoId
+      })
+  },
+
+  updateTodoItem(todoItemId, content, complete, todoId) {
+    const queries = this 
+
+    return new Promise((resolve, reject) => {
+      queries.getTodoItemById(todoItemId, todoId)
+        .then(todoItems => {
+          if(todoItems.length === 0) {
+            throw new Error('todo item does not exist')
+          }
+
+          return todoItems[0]
+        })
+        .then(todoItem => {
+          return knex
+            .returning('*')
+            .update({
+              content: content === undefined ? todoItem.content : content,
+              complete: complete === undefined ? todoItem.complete : complete,
+              updatedAt: knex.fn.now()
+            })
+            .from('TodoItems')
+            .where('id', todoItemId)
+        })
+        .then(todoItems => resolve(todoItems[0])) // comes back in array but will only contain one object
         .catch(error => reject(error))
     })
   }
