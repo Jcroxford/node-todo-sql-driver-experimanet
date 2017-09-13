@@ -1,9 +1,6 @@
 const knex = require('./knex')
 const _ = require('lodash')
 
-// FIXME: if there are no todos items for a todo, should not have objects inside of it just an empty array
-// FIXME: error handling for some routes that need it (trying to create a todo for an id that does not exist)
-
 // ===========================
 // helper methods
 // ===========================
@@ -13,24 +10,42 @@ const formatTodos = (todos) => {
   const formattedTodos = []
   
   _.forIn(todos, (value, key) => {
-    const { id, title, createdAt, updatedAt } = value[0]
-    const todo = { id, title, createdAt, updatedAt }
+    // all todo lists that do not have any todo items will be listed in the
+    // null category. If any of these lists exist, we must loop through each
+    // object and get their own unique properties. Otherwise, unique properties
+    // can be obtained from the first todoItem the list contains
+    if(key === 'null') {
+      for(let todo of value) {
+        const { id, title, createdAt, updatedAt } = todo
 
-    todo.todoItems = []
-    for(todoItem of value) {
-      const item = {
-        id: todoItem['item.id'],
-        content: todoItem['item.content'],
-        complete: todoItem['item.complete'],
-        createdAt: todoItem['item.createdAt'],
-        updatedAt: todoItem['item.updatedAt'],
-        todoId: todoItem['item.todoId']
+        formattedTodos.push({
+          id,
+          title,
+          createdAt,
+          updatedAt,
+          todoItems: []
+        })
       }
+    } else {
+      const { id, title, createdAt, updatedAt } = value[0]
+      const todo = { id, title, createdAt, updatedAt }
 
-      todo.todoItems.push(item)
+      todo.todoItems = []
+      for(let todoItem of value) {
+        const item = {
+          id: todoItem['item.id'],
+          content: todoItem['item.content'],
+          complete: todoItem['item.complete'],
+          createdAt: todoItem['item.createdAt'],
+          updatedAt: todoItem['item.updatedAt'],
+          todoId: todoItem['item.todoId']
+        }
+  
+        todo.todoItems.push(item)
+      }
+  
+      formattedTodos.push(todo)
     }
-
-    formattedTodos.push(todo)
   })
 
   return formattedTodos
@@ -147,10 +162,19 @@ module.exports = {
   // todoItem methods
   // ===========================
   createTodoItem(content, todoId) {
-    return knex
-      .returning('*')
-      .insert({ content, todoId })
-      .into('TodoItems')
+    const querries = this
+
+    return new Promise((resolve, reject) => {
+      querries.getTodoById(todoId)
+        .then(todos => {
+          if(todos.length === 0) {
+            throw new Error('todo does not exist')
+          }
+
+          resolve(knex.returning('*').insert({ content, todoId }).into('TodoItems'))
+        })
+        .catch(error => reject(error))
+    })
   }
 
 }
