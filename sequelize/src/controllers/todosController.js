@@ -65,7 +65,6 @@ module.exports = {
     return Todo
       .findById(req.params.todoId)
       .then(todo => {
-        console.log(todo);
         if(!todo) {
           throw new Error('todo not found')
         }
