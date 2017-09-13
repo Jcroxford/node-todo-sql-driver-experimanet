@@ -15,4 +15,4 @@ app.get('*', (req, res) => {
 })
 
 const port = 3030
-app.listen(port, () => console.log(`server is listeingin on http://localhost:${port}`))
+app.listen(port, () => console.log(`server is listening on http://localhost:${port}`))
