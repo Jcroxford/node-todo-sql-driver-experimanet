@@ -150,7 +150,7 @@ module.exports = {
             throw new Error('todo does not exist')
           }
 
-          return knex.from('TodoItems').del().where('todoId', todoId)
+          return knex.from('TodoItems').del().where('todoId', todoId) // FIXME: does this delete all todos in a list if it has more than one?
         })
         .then(() => knex.from('Todos').del().where('id', todoId))
         .then(() => resolve())
@@ -211,6 +211,20 @@ module.exports = {
             .where('id', todoItemId)
         })
         .then(todoItems => resolve(todoItems[0])) // comes back in array but will only contain one object
+        .catch(error => reject(error))
+    })
+  },
+
+  destroyTodoItem(todoItemId, todoId) {
+    return new Promise((resolve, reject) => {
+      this.getTodoItemById(todoItemId, todoId)
+        .then(todoItems => {
+          if(todoItems.length === 0) {
+            throw new Error('todo item does not exist')
+          }
+
+          resolve(knex.from('TodoItems').del().where('id', todoItemId))
+        })
         .catch(error => reject(error))
     })
   }

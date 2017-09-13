@@ -17,6 +17,13 @@ module.exports = {
       .updateTodoItem(todoItemId, content, complete, todoId)
       .then(todoItem => res.status(201).send(todoItem))
       .catch(error => res.status(400).send({ message: error.message }))
+    },
+
+    destroy(req, res) {
+      return queries
+        .destroyTodoItem(req.params.todoItemId, req.params.todoId)
+        .then(() => res.status(204).send())
+        .catch(error => res.status(400).send({ message: error.message }))
     }
 
 }
