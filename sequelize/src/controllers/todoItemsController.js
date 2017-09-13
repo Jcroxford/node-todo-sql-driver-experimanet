@@ -34,7 +34,7 @@ module.exports = {
       .catch(error => res.status(400).send({ message: error.message }))
   },
 
-  delete(req, res) {
+  destroy(req, res) {
     return TodoItem
       .find({
         where: {
