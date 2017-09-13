@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.get('/api/todos/list', todosController.list)
   app.get('/api/todos/:todoId', todosController.retrieve)
   app.put('/api/todos/update/:todoId', todosController.update)
-  // app.delete('/api/todos/remove/:todoId', todosController.destroy)
+  app.delete('/api/todos/remove/:todoId', todosController.destroy)
 
   // todo items routes
   app.post('/api/todos/create/:todoId/items', todoItemsController.create)

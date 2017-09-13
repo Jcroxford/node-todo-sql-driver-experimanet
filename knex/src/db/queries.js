@@ -1,6 +1,9 @@
 const knex = require('./knex')
 const _ = require('lodash')
 
+// FIXME: if there are no todos items for a todo, should not have objects inside of it just an empty array
+// FIXME: error handling for some routes that need it (trying to create a todo for an id that does not exist)
+
 // ===========================
 // helper methods
 // ===========================
@@ -108,7 +111,6 @@ module.exports = {
     }
     
     return new Promise((resolve, reject) => {
-
       knex
         .from('Todos')
         .update({ title, updatedAt: knex.fn.now() })
@@ -119,6 +121,24 @@ module.exports = {
           }
         })
         .then(() => resolve(queries.getTodoById(todoId)))
+        .catch(error => reject(error))
+    })
+  },
+
+  destroyTodo(todoId) {
+    const queries = this
+
+    return new Promise((resolve, reject) => {
+      queries.getTodoById(todoId)
+        .then(todos => {
+          if(todos.length === 0) {
+            throw new Error('todo does not exist')
+          }
+
+          return knex.from('TodoItems').del().where('todoId', todoId)
+        })
+        .then(() => knex.from('Todos').del().where('id', todoId))
+        .then(() => resolve())
         .catch(error => reject(error))
     })
   },
