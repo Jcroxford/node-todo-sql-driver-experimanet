@@ -119,10 +119,8 @@ module.exports = {
   },
 
   updateTodoById(todoId, title) {
-    const queries = this
-    
     if(!title) {
-      return Promise.resolve(queries.getTodoById(todoId))
+      return Promise.resolve(this.getTodoById(todoId))
     }
     
     return new Promise((resolve, reject) => {
@@ -135,22 +133,20 @@ module.exports = {
             throw new Error('todo does not exist')
           }
         })
-        .then(() => resolve(queries.getTodoById(todoId)))
+        .then(() => resolve(this.getTodoById(todoId)))
         .catch(error => reject(error))
     })
   },
 
   destroyTodo(todoId) {
-    const queries = this
-
     return new Promise((resolve, reject) => {
-      queries.getTodoById(todoId)
+      this.getTodoById(todoId)
         .then(todos => {
           if(todos.length === 0) {
             throw new Error('todo does not exist')
           }
 
-          return knex.from('TodoItems').del().where('todoId', todoId) // FIXME: does this delete all todos in a list if it has more than one?
+          return knex.from('TodoItems').del().where('todoId', todoId)
         })
         .then(() => knex.from('Todos').del().where('id', todoId))
         .then(() => resolve())
@@ -162,10 +158,8 @@ module.exports = {
   // todoItem methods
   // ===========================
   createTodoItem(content, todoId) {
-    const queries = this
-
     return new Promise((resolve, reject) => {
-      queries.getTodoById(todoId)
+      this.getTodoById(todoId)
         .then(todos => {
           if(todos.length === 0) {
             throw new Error('todo does not exist')
@@ -188,10 +182,8 @@ module.exports = {
   },
 
   updateTodoItem(todoItemId, content, complete, todoId) {
-    const queries = this 
-
     return new Promise((resolve, reject) => {
-      queries.getTodoItemById(todoItemId, todoId)
+      this.getTodoItemById(todoItemId, todoId)
         .then(todoItems => {
           if(todoItems.length === 0) {
             throw new Error('todo item does not exist')

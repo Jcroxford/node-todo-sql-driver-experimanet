@@ -13,6 +13,8 @@ module.exports = {
   },
 
   update(req, res) {
+    const { content, complete } = req.body
+
     return TodoItem
       .find({
         where: {
@@ -26,15 +28,15 @@ module.exports = {
         }
 
         return todoItem.update({
-          content: req.body.content || todoItem.content,
-          completed: req.body.completed || todoItem.completed
+          content: content === undefined ? todoItem.content : content,
+          complete: complete === undefined ? todoItem.complete : complete
         })
       })
       .then(todoItem => res.send(todoItem))
       .catch(error => res.status(400).send({ message: error.message }))
   },
 
-  delete(req, res) {
+  destroy(req, res) {
     return TodoItem
       .find({
         where: {
