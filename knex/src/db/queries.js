@@ -51,7 +51,7 @@ const formatTodos = (todos) => {
   return formattedTodos
 }
 
-const groupTodosByTodoId = todos => _.groupBy(todos, 'item.todoId')
+const groupTodoItemsByTodoId = todos => _.groupBy(todos, 'item.todoId')
 
 module.exports = {
 
@@ -82,7 +82,7 @@ module.exports = {
         )
         .from('Todos')
         .leftJoin('TodoItems', 'Todos.id', 'TodoItems.todoId')
-        .then(todos => groupTodosByTodoId(todos))
+        .then(todos => groupTodoItemsByTodoId(todos))
         .then(todos => resolve(formatTodos(todos)))
         .catch(error => reject(error))
     })
@@ -111,7 +111,7 @@ module.exports = {
             throw new Error('todo does not exist')
           }
 
-          return groupTodosByTodoId(todos)
+          return groupTodoItemsByTodoId(todos)
         })
         .then(todos => resolve(formatTodos(todos)[0])) // removing from array because there should only ever be 1 object
         .catch(error => reject(error))
@@ -146,9 +146,8 @@ module.exports = {
             throw new Error('todo does not exist')
           }
 
-          return knex.from('TodoItems').del().where('todoId', todoId)
+          return knex.from('Todos').del().where('id', todoId)
         })
-        .then(() => knex.from('Todos').del().where('id', todoId))
         .then(() => resolve())
         .catch(error => reject(error))
     })
