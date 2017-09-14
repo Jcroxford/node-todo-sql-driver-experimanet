@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
     todoItemsTable.timestamp('createdAt').defaultTo(knex.fn.now())
     todoItemsTable.timestamp('updatedAt').defaultTo(knex.fn.now())
     todoItemsTable.integer('todoId').unsigned().notNullable()
-    todoItemsTable.foreign('todoId').references('id').inTable('Todos')
+    todoItemsTable.foreign('todoId').references('id').inTable('Todos').onDelete('CASCADE')
   })
 };
 
