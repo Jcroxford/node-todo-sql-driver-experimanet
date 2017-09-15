@@ -46,6 +46,15 @@ module.exports = {
       })
       .then(todo => res.send(todo))
       .catch(error => res.status(400).send({ message: error.message }))
+  },
+
+  destroy(req, res) {
+    return Todos
+      .query()
+      .delete()
+      .where('id', req.params.todoId)
+      .then(() => res.status(204).send())
+      .catch(error => res.status(400).send({ message: error.message }))
   }
 
 }
