@@ -1,0 +1,24 @@
+{
+  "name": "opjection-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jesse",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "knex": "^0.13.0",
+    "morgan": "^1.8.2",
+    "objection": "^0.8.9",
+    "pg": "^7.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.0"
+  }
+}

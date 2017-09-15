@@ -1,5 +1,5 @@
-const todosController = require('../controllers').todos
-const todoItemsController = require('../controllers').todoItems
+const todosController = require('../controllers').todosController
+const todoItemsController = require('../controllers').todoItemsController
 
 module.exports = (app) => {
   
