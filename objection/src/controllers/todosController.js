@@ -17,6 +17,21 @@ module.exports = {
       .eager('todoItems')
       .then(todos => res.send(todos))
       .catch(error => res.status(400).send(error))
+  },
+
+  retrieve(req, res) {
+    Todos
+      .query()
+      .eager('todoItems')
+      .where('id', req.params.todoId)
+      .then(todos => {
+        if(todos.length === 0) {
+          throw new Error('todo list does not exist')
+        }
+        
+        res.send(todos[0])
+      })
+      .catch(error => res.status(400).send({ message: error.message }))
   }
 
 }
