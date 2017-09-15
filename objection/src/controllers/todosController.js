@@ -32,6 +32,20 @@ module.exports = {
         res.send(todos[0])
       })
       .catch(error => res.status(400).send({ message: error.message }))
+  },
+
+  update(req, res) {
+    if(!req.body.title) {
+      return res.status(400).send({ message: 'request must contain a valid title in order to update' })
+    }
+    
+    return Todos
+      .query()
+      .updateAndFetchById(req.params.todoId, {
+        title: req.body.title
+      })
+      .then(todo => res.send(todo))
+      .catch(error => res.status(400).send({ message: error.message }))
   }
 
 }
