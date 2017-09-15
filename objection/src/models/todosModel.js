@@ -5,12 +5,10 @@ class Todos extends Model {
     return 'Todos'
   }
 
-  // FIXME: define the json schema or ignore?
   static get jsonSchema() {
     return {
       type: 'object',
       required: ['title'],
-
       properties: {
         id: { type: 'integer' },
         title: { type: 'string', minLength: 1, maxLength: 255 },
