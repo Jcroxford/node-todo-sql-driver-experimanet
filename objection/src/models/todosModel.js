@@ -18,11 +18,20 @@ class Todos extends Model {
     }
   }
 
-  // static get relationMappings() {
-  //   return {
-
-  //   }
-  // }
+  static get relationMappings() {
+    const TodoItems = require('./todoItemsModel')
+    
+    return {
+      todoItems: {
+        relation: Model.HasManyRelation,
+        modelClass: TodoItems,
+        join: {
+          from: 'Todos.id',
+          to: 'TodoItems.todoId'
+        }
+      }
+    }
+  }
 }
 
 module.exports = Todos

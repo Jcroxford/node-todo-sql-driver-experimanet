@@ -14,6 +14,7 @@ module.exports = {
   list(req, res) {
     Todos
       .query()
+      .eager('todoItems')
       .then(todos => res.send(todos))
       .catch(error => res.status(400).send(error))
   }
